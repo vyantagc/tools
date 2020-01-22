@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blogspot Flash Register</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="col-md-12 my-4">
+			<center><h1>Blogspot Flash Register</h1></center>
+			<div class="card my-4">
+				<div class="card-body">
+					<div class="form-group mb-4">
+					<label for="media-type"><b>Additional title :</b></label>
+					<div class="input-group">
+					  <div class="input-group-prepend">
+					    <select class="form-control" id="costum_title">
+							<option value="1" selected >ON</option>
+							<option class="text-danger" value="0" >OFF</option>
+						</select>
+					  </div>
+					  <input type="text" class="form-control" id="add_title" placeholder="title tambahan.." value="Music">
+					</div>
+					</div>				
+					<div class="form-group mb-4">
+					  <label for="domain_list"><b>1 line per blogspot domain : </b></label>
+					  <textarea class="domain_list form-control mb-3" rows="11" id="domain_list" placeholder="insert list here.."></textarea>
+					  <button class="go_generate btn btn-primary">Register</button>
+					  <button class="clear_txt btn btn-danger">Clear</button>
+					</div>
+					<hr>
+					<h2 class="h5">Cara Menggunakan : </h2>
+					<div class="d-block border my-3 pt-3">
+						<ol>
+							<li>Insert List domain ke textarea</li>
+							<li>Pastikan format tiap blogspot domain valid ex : <a href="http://vyantagc.blogspot.com/" target="_blank"><small>http://vyantagc.blogspot.com/</small></a></li>
+							<li>Klik <span class="text-primary">Register</span> Button</li>
+						</ol>
+					</div>					
+					<p class="border my-3 p-2">
+						Tips : Gunakan sebijak mungkin, kenali spesifikasi laptop dan koneksi kalian. Karena ketika sudah <b>input list domain</b> lalu Klik <b>register</b>, maka semua domain akan dibuka secara <b>serentak</b> menggunakan new tab.
+					</p>				
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<footer>
+	<div class="d-block" align="center">
+		<p>Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+	</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$(document).on('click','.go_generate',function()
+	{    
+		$.each($('#domain_list').val().split(/\n/), function(i, domain){
+		   if(domain && domain.length)
+		   {
+		   	var sub 	= sub_filter(domain);
+		   	var title 	= title_maker(sub);
+		   	var target 	= `https://www.blogger.com/blogger.g?#create/title=${title};address=${sub}`;
+		   	window.open(target, '_blank');
+		   }
+		});
+	})
+
+	$(document).on('click','.clear_txt',function()
+	{    
+		$('#domain_list').val('');
+	})
+
+	function sub_filter(url)
+	{
+		var a = url.includes(".");
+		var b = url.includes("//");
+
+		if(a){url = url.split('.')[0];}
+
+		if(b){url = url.split('//')[1];}
+
+		return url;		
+	}
+
+	function title_maker(sub)
+	{
+		var check = $("#costum_title").val();
+
+		if(check > 0)
+		{
+			var kw 		= sub.split('-');
+			var first 	= kw[0];
+			var add 	= $("#add_title").val();
+
+			if(first == add.toLowerCase())
+			{
+				sub = `${first} ${kw[1]}`;
+			}
+			else
+			{
+				sub = `${first} ${add}`;
+			}
+
+			sub = sub.replace(/\ /g, '%20');
+		}
+		else
+		{
+			sub = sub.replace(/\-/g, '%20');
+		}
+
+		return sub;
+	}
+})
+</script>
+</html>
