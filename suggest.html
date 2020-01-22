@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Blogspot Flash Register</title>
+	<title>Google Suggest Generator</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="theme-color" content="#ffffff">
 	<meta name="msapplication-TileColor" content="#ffffff">
@@ -9,40 +9,43 @@
 </head>
 <body>
 	<div class="container">
-		<div class="col-md-12 my-4">
-			<center><h1>Blogspot Flash Register</h1></center>
-			<div class="card my-4">
+		<div class="col-12 my-2" align="center">
+			<h1 class="h3">Google Suggest Generator</h1>
+		</div>
+		<div class="col-md-8 offset-md-2 my-4">
+			<div class="card">
 				<div class="card-body">
-					<div class="form-group mb-4">
-					<label for="media-type"><b>Additional title :</b></label>
-					<div class="input-group">
-					  <div class="input-group-prepend">
-					    <select class="form-control" id="costum_title">
-							<option value="1" selected >ON</option>
-							<option class="text-danger" value="0" >OFF</option>
+					<div class="form-group">
+					<label for="google-lang">Language</label>
+						<select class="form-control" id="google-lang">
+							<option value="en" selected >English</option>
+							<option value="fr" >French</option>
+							<option value="de" >German</option>
+							<option value="hi" >Hindi</option>
+							<option value="id" >Indonesian</option>
+							<option value="it" >Italian</option>
+							<option value="kn" >Kannada</option>
+							<option value="ru" >Russian</option>
+							<option value="es" >Spanish</option>
 						</select>
-					  </div>
-					  <input type="text" class="form-control" id="add_title" placeholder="title tambahan.." value="Music">
 					</div>
-					</div>				
-					<div class="form-group mb-4">
-					  <label for="domain_list"><b>1 line per blogspot domain : </b></label>
-					  <textarea class="domain_list form-control mb-3" rows="11" id="domain_list" placeholder="insert list here.."></textarea>
-					  <button class="go_generate btn btn-primary">Register</button>
-					  <button class="clear_txt btn btn-danger">Clear</button>
+					<div class="form-group">
+					<label for="media-type">Media Type</label>
+						<select multiple class="form-control" id="media-type">
+							<option value="sh" selected >products</option>
+							<option value="i" >Image</option>
+							<option value="r" >Recipes</option>
+							<option value="yt" >Youtube</option>
+							<option value="bo" >Books</option>
+							<option value="n" >News</option>
+							<option value="" >Web Search</option>
+						</select>
 					</div>
-					<hr>
-					<h2 class="h5">Cara Menggunakan : </h2>
-					<div class="d-block border my-3 pt-3">
-						<ol>
-							<li>Insert List domain ke textarea</li>
-							<li>Pastikan format tiap blogspot domain valid ex : <a href="http://vyantagc.blogspot.com/" target="_blank"><small>http://vyantagc.blogspot.com/</small></a></li>
-							<li>Klik <span class="text-primary">Register</span> Button</li>
-						</ol>
-					</div>					
-					<p class="border my-3 p-2">
-						Tips : Gunakan sebijak mungkin, kenali spesifikasi laptop dan koneksi kalian. Karena ketika sudah <b>input list domain</b> lalu Klik <b>register</b>, maka semua domain akan dibuka secara <b>serentak</b> menggunakan new tab.
-					</p>				
+					<div class="form-group">
+					  <label for="comment">Keywords:</label>
+					  <textarea class="kw_list form-control" rows="10" id="kw_list"></textarea>
+					</div> 
+					<button class="get_suggest btn btn-primary">Get Suggest</button>
 				</div>
 			</div>
 		</div>
@@ -58,63 +61,58 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$(document).on('click','.go_generate',function()
+	$(document).on('click','.get_suggest',function()
 	{    
-		$.each($('#domain_list').val().split(/\n/), function(i, domain){
-		   if(domain && domain.length)
-		   {
-		   	var sub 	= sub_filter(domain);
-		   	var title 	= title_maker(sub);
-		   	var target 	= `https://www.blogger.com/blogger.g?#create/title=${title};address=${sub}`;
-		   	window.open(target, '_blank');
-		   }
-		});
+		var list_arr = $(".kw_list").val().replace(/\r\n/g,"\n").split("\n");
+		if(list_arr)
+		{
+			$(".kw_list").val('');
+			$.each(list_arr, function (key, val) {
+		        get_suggest(val);
+		    });		
+		}
 	})
 
-	$(document).on('click','.clear_txt',function()
-	{    
-		$('#domain_list').val('');
-	})
+	var get_suggest = function(query){
 
-	function sub_filter(url)
-	{
-		var a = url.includes(".");
-		var b = url.includes("//");
+		var hl = $('#google-lang').val(),
+		ds = $('#media-type').val();
 
-		if(a){url = url.split('.')[0];}
+		//console.log(hl);
+		//console.log(ds);
 
-		if(b){url = url.split('//')[1];}
+		$.ajax({
+	        url: 'https://suggestqueries.google.com/complete/search',
+	        jsonp: 'jsonp',
+	        cache: !0,
+	        dataType: "jsonp",
+	        async: !0,
+	        crossDomain: !0,
+	        method: "GET",
+	        data: {
+	            q: query,
+	            hl: hl,
+	            ds: ds,
+	            client: 'chrome'
+	        }
+	    }).done(function(data)
+	    {	
+	    	if(data[1].length > 0)
+	    	{
+	    		var kw_list = $(".kw_list").val();
 
-		return url;		
-	}
+				var rn = "";
 
-	function title_maker(sub)
-	{
-		var check = $("#costum_title").val();
+				if(kw_list)
+				{
+					rn = "\r\n";
+				}
 
-		if(check > 0)
-		{
-			var kw 		= sub.split('-');
-			var first 	= kw[0];
-			var add 	= $("#add_title").val();
+		    	var hasil = data[1].join("\r\n");
 
-			if(first == add.toLowerCase())
-			{
-				sub = `${first} ${kw[1]}`;
-			}
-			else
-			{
-				sub = `${first} ${add}`;
-			}
-
-			sub = sub.replace(/\ /g, '%20');
-		}
-		else
-		{
-			sub = sub.replace(/\-/g, '%20');
-		}
-
-		return sub;
+		        $(".kw_list").val(kw_list+rn+hasil);
+	    	}
+	    });
 	}
 })
 </script>
