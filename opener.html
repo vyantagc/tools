@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>URL Opener</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="col-md-12 my-4">
+			<center><h1>URL Opener</h1></center>
+			<div class="card my-4">
+				<div class="card-body">			
+					<div class="form-group mb-4">
+					  <label for="domain_list"><b>1 line per URL : </b></label>
+					  <textarea class="domain_list form-control mb-3" rows="11" id="domain_list" placeholder="insert list here.."></textarea>
+					  <button class="go_generate btn btn-primary">Submit</button>
+					  <button class="clear_txt btn btn-danger">Clear</button>
+					</div>				
+				</div>
+			</div>
+			<div class="card mb-4">
+				<div class="card-body">	
+					<h3><b>Tips :</b></h3>
+					<ul>
+						<li>Allow popup when browser blocking popup for this page.</li>
+						<li>Do not open too much Link, because it will open many tabs.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<footer>
+	<div class="d-block" align="center">
+		<p>This is free tool Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+	</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$(document).on('click','.go_generate',function()
+	{    
+		$.each($('#domain_list').val().split(/\n/), function(i, domain){
+		   if(domain && domain.length)
+		   {
+		   	window.open(domain, '_blank');
+		   }
+		});
+	})
+
+	$(document).on('click','.clear_txt',function()
+	{    
+		$('#domain_list').val('');
+	})
+})
+</script>
+</html>
