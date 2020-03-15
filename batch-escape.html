@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Batch Escape Special Character</title>
+	<meta charset='utf-8'/>
+	<meta content='width=device-width,minimum-scale=1,initial-scale=1' name='viewport'/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 offset-md-2" style="margin-top: 120px;margin-bottom:50px;min-height: 50vh">
+				<div class="card">
+					<div class="card-header">
+						<h1 class="h2">Batch Escape Special Character</h1>
+					</div>
+					<div class="card-body">
+						<form method="post" action="batch.php">
+						  <div class="form-group">
+						    <textarea class="form-control" id="txt" name="txt" rows="5"></textarea>
+						  </div>
+						  <button id="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="d-block" align="center">
+	<p>This is free tool Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha256-OUFW7hFO0/r5aEGTQOz9F/aXQOt+TwqI1Z4fbVvww04=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	String.prototype.replaceArray = function(find, replace) {
+	  var replaceString = this;
+	  for (var i = 0; i < find.length; i++) {
+	    replaceString = replaceString.replace(find[i], replace[i]);
+	  }
+	  return replaceString;
+	};
+
+	$(document).ready(function(){
+		$(document).on('click','#submit',function(e)
+		{
+			e.preventDefault();
+
+			var str = $('#txt').val();
+			var search = ['%','^','&','<','>','|',"'",'`',',',';','=','(',')','!','"','\\','[',']','"','.','*','?'];
+			var replace = ['%%','^^','^&','^<','^>','^|',"^'",'^`','^,','^;','^=','^(','^)','^^!','""','\\\\','\[','\]','\"','\.','\*','\?'];
+			var res = str.replaceArray(search, replace);
+
+			console.log(res);
+
+			$('#txt').val(res);
+		})
+	})
+</script>
+</body>
+</html>
