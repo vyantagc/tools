@@ -73,8 +73,9 @@ $(document).ready(function(){
 		var result =
 `User-agent: *
 Allow: /
-
-Sitemap: https://${domain}.blogspot.com/sitemap.xml`;
+Sitemap: https://${domain}.blogspot.com/sitemap.xml
+Sitemap: https://${domain}.blogspot.com/atom.xml
+`;
 
 
 	var sitemap_conf = $("#sitemap_conf").val();
@@ -86,7 +87,6 @@ Sitemap: https://${domain}.blogspot.com/atom.xml?redirect=false
 Sitemap: https://${domain}.blogspot.com/atom.xml?redirect=false&amp;start-index=1&amp;max-results=100
 Sitemap: https://${domain}.blogspot.com/atom.xml?redirect=false&amp;start-index=1&amp;max-results=99999
 Sitemap: https://${domain}.blogspot.com/atom.xml?redirect=false&amp;start-index=1&amp;max-results=500
-Sitemap: https://${domain}.blogspot.com/atom.xml
 Sitemap: https://${domain}.blogspot.com/feeds/posts/default?orderby=UPDATED
 Sitemap: https://${domain}.blogspot.com/feeds/posts/default?max-results=99999&amp;amp;alt=json-in-script&amp;amp;callback=loadtoc
 Sitemap: https://${domain}.blogspot.com/feeds/posts/default?max-results=500&amp;amp;alt=json-in-script&amp;amp;callback=loadtoc`;
