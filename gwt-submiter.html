@@ -138,9 +138,11 @@ $(document).ready(function(){
 
 				$.each(arr, function (key, val)
 				{
-			        if(val.permissionLevel == 'siteOwner')
+					var site = val.siteUrl;
+
+			        if(val.permissionLevel == 'siteOwner' && !site.includes('sc-domain:'))
 			        {
-			        	arr_res.push(val.siteUrl);
+			        	arr_res.push(site);
 			        }
 			    });	
 
