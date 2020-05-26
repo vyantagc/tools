@@ -65,10 +65,10 @@ $(document).ready(function(){
 		sessionStorage.setItem('token_expired', expired);
 		sessionStorage.setItem('access_token', pre_token);
 	}
-	/*else if(!oauth)
+	else if(!oauth)
 	{
 		google_auth();
-	}*/
+	}
 
 	var access_token 	= sessionStorage.getItem('access_token');
 	var token_expired	= sessionStorage.getItem('token_expired');
@@ -158,7 +158,7 @@ function google_auth()
 	var endpoint 	= 'https://accounts.google.com/o/oauth2/v2/auth',
 		client_id 		= '168737006983-ulbodnih9fbapg4krhrmarl81dmosj1l.apps.googleusercontent.com',
 		scope 			= encodeURIComponent('https://www.googleapis.com/auth/webmasters'),
-		redirect 		= encodeURIComponent('https://ghcdn.rawgit.org/vyantagc/tools/master/gwt-domain-submiter.html');
+		redirect 		= encodeURIComponent('https://ghcdn.rawgit.org/vyantagc/tools/master/gwt-domain-submite.html');
 
 	window.location = `https://accounts.google.com/o/oauth2/v2/auth?include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirect}&client_id=${client_id}&scope=${scope}`;
 }
