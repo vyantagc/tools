@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GWT - Domain Submiter</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+	<script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="col-12 my-2" align="center">
+			<h1 class="h3">GWT - Domain Submiter</h1>
+		</div>
+		<div class="col-md-8 offset-md-2 my-4">
+			<div class="card mb-4">
+				<div class="card-header">
+					<h1 class="h4">Access Token</h1>
+				</div>
+				<div id="token_info" class="card-body">
+					<button class="req_token btn btn-primary">Request Token</button>
+				</div>
+			</div>
+			<hr>
+			<div class="card">
+				<div class="card-header">
+					<h1 class="h4">Add Domain</h1>
+				</div>
+				<div class="card-body">
+					<div class="form-group">
+						<label for="api_key">Access Token :</label>
+						<input type="text" class="form-control" id="access_token" placeholder="Token..">
+					</div>
+					<div class="form-group">
+					  <label for="arr_domain">Domain List :</label>
+					  <textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
+					</div> 
+					<button class="submit_domain btn btn-primary">Submit</button>					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<div class="d-block" align="center">
+	<p>Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var date 			= $.now();
+	var pre_token 		= gVar()["access_token"];
+	var oauth 			= sessionStorage.getItem('oauth');
+
+	if(pre_token)
+	{
+		var expired 	= gVar()["expires_in"],
+			expired 	= date + (expired * 1000);
+
+		sessionStorage.setItem('oauth', true);
+		sessionStorage.setItem('token_expired', expired);
+		sessionStorage.setItem('access_token', pre_token);
+	}
+	else if(!oauth)
+	{
+		google_auth();
+	}
+
+	var access_token 	= sessionStorage.getItem('access_token');
+	var token_expired	= sessionStorage.getItem('token_expired');
+
+	if(access_token)
+	{	
+		const s_expired	= (token_expired - date) / 1000;
+		const m_expired	= parseInt(s_expired / 60);
+
+		if(m_expired < 5)
+		{
+			google_auth();
+		}
+
+		$('#token_info').html(`<p>Access : <b class='text-success'>Authorized</b><br>Expired in : <b class='text-danger'>${m_expired} minutes</b></p>`);
+		$('#access_token').val(access_token);
+	}
+
+	$(document).on('click','.req_token',function()
+	{
+		google_auth();
+	});
+
+	$(document).on('click','.submit_domain',function()
+	{    
+		var arr_domain 	= $(".arr_domain").val().replace(/\r\n/g,"\n").split("\n");
+
+		if(arr_domain && access_token)
+		{
+			reg_domain(arr_domain);	
+		}
+	})
+
+	var reg_domain = function(arr_domain){
+
+		var a_token 	= $('#access_token').val();
+
+		$.each(arr_domain, function (key, d)
+		{
+			var domain = pre_domain(d),
+			target 	= `https://www.googleapis.com/webmasters/v3/sites/${domain}`;
+
+		    $.ajax({
+		        url: target,
+				type: 'PUT',
+				beforeSend: function (xhr) {
+				    xhr.setRequestHeader('Authorization', `Bearer ${a_token}`);
+				},
+				statusCode: {
+				    204: function() {
+				      console.log(`Success to insert `)
+				    }
+				}
+		    });
+
+		    console.log(`Submit request for : ${d}`);
+
+		})
+
+		alert('done, wait 5 seconds and check Google webmaster tools..');			
+	}
+});
+
+function pre_domain(d)
+{
+	var d_type = d.includes('http://') || d.includes('https://');
+
+	if(!d_type)
+	{
+		d = `sc-domain:${d}`;
+	}
+
+	return encodeURIComponent(d);
+}
+
+function gVar() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+}
+
+function google_auth()
+{
+	var endpoint 	= 'https://accounts.google.com/o/oauth2/v2/auth',
+		client_id 		= '168737006983-ulbodnih9fbapg4krhrmarl81dmosj1l.apps.googleusercontent.com',
+		scope 			= encodeURIComponent('https://www.googleapis.com/auth/webmasters'),
+		redirect 		= encodeURIComponent('https://vyantagc.github.io/tools/gwt-domain.html');
+
+	window.location = `https://accounts.google.com/o/oauth2/v2/auth?include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirect}&client_id=${client_id}&scope=${scope}`;
+}
+
+</script>
+</html>

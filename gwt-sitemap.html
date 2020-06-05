@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sitemap Insert</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+	<script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="col-12 my-2" align="center">
+			<h1 class="h3">Google Sitemap Submiter</h1>
+		</div>
+		<div class="col-md-8 offset-md-2 my-4">
+			<div class="card mb-4">
+				<div class="card-header">
+					<h1 class="h4">Access Token</h1>
+				</div>
+				<div id="token_info" class="card-body">
+					<button class="req_token btn btn-primary">Request Token</button>
+				</div>
+			</div>
+			<hr>
+			<div class="card">
+				<div class="card-header">
+					<h1 class="h4">Submit Sitemap</h1>
+				</div>
+				<div class="card-body">
+					<div class="form-group">
+						<label for="api_key">Access Token :</label>
+						<input type="text" class="form-control" id="access_token" placeholder="Token..">
+					</div>
+					<div class="form-group">
+					  <label for="arr_domain">Domains :</label>
+					  <div class="my-2">
+					  	<button class="get_domains btn btn-sm btn-primary">Get Domain List</button>
+					  </div>
+					  <textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
+					</div> 
+					<div class="form-group">
+					  <label for="arr_sitemap">Sitemap Path :</label>
+					  <textarea class="arr_sitemap form-control" rows="10" id="arr_sitemap" placeholder="one sitemap path per line.."></textarea>
+					</div> 
+					<button class="submit_sitemap btn btn-primary">Submit</button>					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<div class="d-block" align="center">
+	<p>Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var date 			= $.now();
+	var pre_token 		= gVar()["access_token"];
+	var oauth 			= sessionStorage.getItem('oauth');
+
+	if(pre_token)
+	{
+		var expired 	= gVar()["expires_in"],
+			expired 	= date + (expired * 1000);
+
+		sessionStorage.setItem('oauth', true);
+		sessionStorage.setItem('token_expired', expired);
+		sessionStorage.setItem('access_token', pre_token);
+	}
+	else if(!oauth)
+	{
+		google_auth();
+	}
+
+	var access_token 	= sessionStorage.getItem('access_token');
+	var token_expired	= sessionStorage.getItem('token_expired');
+
+	if(access_token)
+	{	
+		const s_expired	= (token_expired - date) / 1000;
+		const m_expired	= parseInt(s_expired / 60);
+
+		if(m_expired < 5)
+		{
+			google_auth();
+		}
+
+		$('#token_info').html(`<p>Access : <b class='text-success'>Authorized</b><br>Expired in : <b class='text-danger'>${m_expired} minutes</b></p>`);
+		$('#access_token').val(access_token);
+	}
+
+	$(document).on('click','.req_token',function()
+	{
+		google_auth();
+	});
+
+	$(document).on('click','.get_domains',function()
+	{
+		get_domains();
+	});
+
+	$(document).on('click','.submit_sitemap',function()
+	{    
+		var arr_domain 	= $(".arr_domain").val().replace(/\r\n/g,"\n").split("\n");
+		var arr_sitemap = $(".arr_sitemap").val().replace(/\r\n/g,"\n").split("\n");
+
+		if(arr_domain && access_token)
+		{
+			$.each(arr_domain, function (key, val) {
+		        put_sitemap(val,arr_sitemap);
+		    });		
+		}
+	})
+
+	var get_domains = function()
+	{
+		var a_token 	= $('#access_token').val();
+
+		$.ajax({
+
+	        url: 'https://www.googleapis.com/webmasters/v3/sites',
+			type: 'GET',
+			beforeSend: function (xhr) {
+			    xhr.setRequestHeader('Authorization', `Bearer ${a_token}`);
+			},
+			success: function(data)
+			{
+				var arr 	= data.siteEntry;
+
+				var arr_res = [];
+
+				$.each(arr, function (key, val)
+				{
+					var site = val.siteUrl;
+
+			        if(val.permissionLevel == 'siteOwner' && !site.includes('sc-domain:'))
+			        {
+			        	arr_res.push(site);
+			        }
+			    });	
+
+			    var ad 		= arr_res.join("\r\n");
+
+			    $(".arr_domain").val(ad);
+			}
+	    });
+	}
+
+	var put_sitemap = function(site_domain,arr_sitemap){
+
+		var a_token 	= $('#access_token').val();
+		var esd 		= encodeURIComponent(site_domain);
+
+		var root_domain = '';
+
+		if(site_domain)
+		{
+			root_domain = (new URL(site_domain)).hostname;
+		}	
+		
+		console.log(`Sitemap for : ${site_domain}`);
+
+		$.each(arr_sitemap, function (key, path)
+		{
+			var map = encodeURIComponent(site_domain + path),
+			target 	= `https://content.googleapis.com/webmasters/v3/sites/${esd}/sitemaps/${map}`;
+
+		    $.ajax({
+		        url: target,
+				type: 'PUT',
+				beforeSend: function (xhr) {
+				    xhr.setRequestHeader('Authorization', `Bearer ${a_token}`);
+				},
+				statusCode: {
+				    204: function() {
+				      console.log(`Success to insert `)
+				    }
+				}
+		    });
+
+		});			
+	}
+});
+
+function gVar() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+}
+
+function google_auth()
+{
+	var endpoint 	= 'https://accounts.google.com/o/oauth2/v2/auth',
+		client_id 		= '168737006983-ulbodnih9fbapg4krhrmarl81dmosj1l.apps.googleusercontent.com',
+		scope 			= encodeURIComponent('https://www.googleapis.com/auth/webmasters'),
+		redirect 		= encodeURIComponent('https://vyantagc.github.io/tools/gwt-sitemap.html');
+
+	window.location = `https://accounts.google.com/o/oauth2/v2/auth?include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirect}&client_id=${client_id}&scope=${scope}`;
+}
+
+</script>
+</html>
