@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SEO - Checker</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+	<script src="https://apis.google.com/js/api.js"></script>
+	<style type="text/css">
+		.table-wrapper {
+		  width: 100%;
+		  max-height: 540px;
+		  overflow-y: auto;
+		  display:inline-block;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 mt-4 my-2" align="center">
+				<h1 class="h3">SEO - Checker</h1>
+			</div>
+			<div class="col-md-4 my-4">
+				<div class="card mb-4">
+					<div class="card-body">
+						<div class="form-group">
+						  <label for="arr_domain">Domain List :</label>
+						  <textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
+						</div> 
+						<button class="check_domain btn btn-primary">Submit</button>					
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 my-4">
+				<div class="card mb-4">
+					<div class="card-body table-wrapper">
+						<table class=" table table-striped">
+							<thead>
+							<tr>
+							  <th scope="col">#</th>
+							  <th scope="col">Domain</th>
+							  <th scope="col">Action</th>
+							</tr>
+							</thead>
+							<tbody id="tbody_domain">
+							</tbody>
+						</table>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<div class="d-block" align="center">
+	<p>Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$(document).on('click','.check_domain',function()
+	{    
+		var arr_domain 	= $(".arr_domain").val().replace(/\r\n/g,"\n").split("\n");
+
+		$.each(arr_domain, function (key, d)
+		{
+
+			var key = key + 1;
+
+			$('#tbody_domain').append(`<tr>
+      			<th scope="row">${key}</th>
+	      		<td>${d}</td>
+	      		<td>
+					<button class="open_domain btn btn-primary btn-sm ml-1" data-domain="${d}" >Check</button>					
+	      			<button class="btn btn-success btn-sm" data-domain="${d}" onclick="textToClipboard('${d}')" >Copy</button>
+				</td>
+			</tr>`);
+		})
+	})
+
+	$(document).on('click','.open_domain',function()
+	{    
+		var d 		= $(this).data('domain');
+
+		var google 	= `https://www.google.com/search?q=site%3A${d}`;
+		var archive	= `https://web.archive.org/web/*/${d}`;
+
+		window.open(archive, '_blank');
+		window.open(google, '_blank');
+	})
+})
+
+function textToClipboard (text) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
+
+</script>
+</html>
