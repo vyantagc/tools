@@ -158,7 +158,7 @@ function google_auth()
 	var endpoint 	= 'https://accounts.google.com/o/oauth2/v2/auth',
 		client_id 		= '168737006983-ulbodnih9fbapg4krhrmarl81dmosj1l.apps.googleusercontent.com',
 		scope 			= encodeURIComponent('https://www.googleapis.com/auth/webmasters'),
-		redirect 		= encodeURIComponent('https://ghcdn.rawgit.org/vyantagc/tools/master/gwt-domain-submite.html');
+		redirect 		= encodeURIComponent('https://vyantagc.github.io/tools/gwt-domain-submite.html');
 
 	window.location = `https://accounts.google.com/o/oauth2/v2/auth?include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirect}&client_id=${client_id}&scope=${scope}`;
 }
