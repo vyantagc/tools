@@ -16,7 +16,7 @@
 		<div class="col-12 my-2" align="center">
 			<h1 class="h3">Blogspot List API</h1>
 		</div>
-		<div class="col-md-8 offset-md-2 my-4">
+		<div class="col-md-12 my-4">
 			<div class="card mb-4">
 				<div class="card-header">
 					<h1 class="h4">Access Token</h1>
@@ -35,17 +35,21 @@
 						<label for="api_key">Access Token :</label>
 						<input type="text" class="form-control" id="access_token" placeholder="Token..">
 					</div>
-					<div class="form-group">
-					  <label for="arr_domain">Domains :</label>
-					  <div class="my-2">
-					  	<button class="get_domains btn btn-sm btn-primary">Get Domain List</button>
-					  </div>
-					  <textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
-					  <hr/>
-					  <div class="my-2">
-					  	<button class="get_domains btn btn-sm btn-primary">Blog id List</button>
-					  </div>
-					  <textarea class="arr_blogid form-control" rows="10" id="arr_blogid" placeholder="Blog id per line.."></textarea>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="arr_domain">Domains :</label>
+							<div class="my-2">
+							<button class="get_domains btn btn-sm btn-primary">Get Domain List</button>
+							</div>
+							<textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
+						<hr/>
+						</div>
+						<div class="col-md-6">
+							<div class="my-2">
+								<label for="arr_blogid">Blog id List :</label>
+							</div>
+							<textarea class="arr_blogid form-control" rows="10" id="arr_blogid" placeholder="Blog id per line.."></textarea>
+						</div>
 					</div>
 					<button class="copy_domain btn btn-primary">COPY</button>					
 				</div>
