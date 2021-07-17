@@ -88,7 +88,7 @@ $(document).ready(function(){
 		}
 		else
 		{
-			get_domains();
+			get_domains(access_token);
 		}
 
 		$('#token_info').html(`<p>Access : <b class='text-success'>Authorized</b><br>Expired in : <b class='text-danger'>${m_expired} minutes</b></p>`);
@@ -105,9 +105,12 @@ $(document).ready(function(){
 		get_domains();
 	});
 
-	function get_domains()
+	function get_domains(a_token='')
 	{
-		var a_token 	= $('#access_token').val();
+		if(!a_token)
+		{
+			a_token 	= $('#access_token').val();
+		}
 
 		$.ajax({
 
