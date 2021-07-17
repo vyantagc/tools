@@ -25,7 +25,7 @@
 					<button class="req_token btn btn-primary">Request Token</button>
 				</div>
 			</div>
-			<hr>
+			<hr/>
 			<div class="card">
 				<div class="card-header">
 					<h1 class="h4">Blogspot List</h1>
@@ -41,6 +41,11 @@
 					  	<button class="get_domains btn btn-sm btn-primary">Get Domain List</button>
 					  </div>
 					  <textarea class="arr_domain form-control" rows="10" id="arr_domain" placeholder="one domain per line.."></textarea>
+					  <hr/>
+					  <div class="my-2">
+					  	<button class="get_domains btn btn-sm btn-primary">Blog id List</button>
+					  </div>
+					  <textarea class="arr_blogid form-control" rows="10" id="arr_blogid" placeholder="Blog id per line.."></textarea>
 					</div>
 					<button class="copy_domain btn btn-primary">COPY</button>					
 				</div>
@@ -122,18 +127,22 @@ $(document).ready(function(){
 				var arr 	= data.items;
 
 				var arr_res = [];
+				var arr_ids = [];
 
 				$.each(arr, function (key, val)
 				{
 			        if(val.status == 'LIVE')
 			        {
 			        	arr_res.push(val.url);
+			        	arr_ids.push(val.id);
 			        }
 			    });	
 
 			    var ad 		= arr_res.join("\r\n");
+			    var ids 	= arr_ids.join("\r\n");
 
 			    $(".arr_domain").val(ad);
+			    $(".arr_blogid").val(ids);
 			}
 	    });
 	}
