@@ -86,13 +86,11 @@ $(document).ready(function(){
 		{
 			google_auth();
 		}
-		else
-		{
-			get_domains(access_token);
-		}
 
 		$('#token_info').html(`<p>Access : <b class='text-success'>Authorized</b><br>Expired in : <b class='text-danger'>${m_expired} minutes</b></p>`);
 		$('#access_token').val(access_token);
+
+		get_domains(access_token);
 	}
 
 	$(document).on('click','.req_token',function()
