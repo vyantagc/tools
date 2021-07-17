@@ -58,14 +58,14 @@ $(document).ready(function(){
 
 	var date 			= $.now();
 	var pre_token 		= gVar()["access_token"];
-	var oauth 			= sessionStorage.getItem('oauth');
+	var oauth 			= sessionStorage.getItem('blog_oauth');
 
 	if(pre_token)
 	{
 		var expired 	= gVar()["expires_in"],
 			expired 	= date + (expired * 1000);
 
-		sessionStorage.setItem('oauth', true);
+		sessionStorage.setItem('blog_oauth', true);
 		sessionStorage.setItem('token_expired', expired);
 		sessionStorage.setItem('access_token', pre_token);
 	}
