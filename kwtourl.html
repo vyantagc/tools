@@ -57,6 +57,7 @@ $(document).ready(function(){
 			$.each(list_arr, function (key, val) {
 
 				if(val){
+					val = val.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
 					var kwEncode = encodeURIComponent(val);
 			        var url = urlMaster.replace('{keyword}', kwEncode);
 					resTxt += `${url}\r\n`;  
