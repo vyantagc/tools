@@ -15,6 +15,13 @@
 		<div class="col-md-8 offset-md-2 my-4">
 			<div class="card">
 				<div class="card-body">
+					<label for="basic-url">Max Words to Generate</label>
+					<div class="input-group mb-3">
+					  <input type="text" class="form-control max_words" id="max_words" aria-describedby="max words" value="4">				  
+					  <div class="input-group-append">
+					    <span class="input-group-text" >Words</span>
+					  </div>
+					</div>
 					<div class="form-group">
 					<label for="google-lang">Language</label>
 						<select class="form-control" id="google-lang">
@@ -34,13 +41,13 @@
 					<div class="form-group">
 					<label for="media-type">Media Type</label>
 						<select multiple class="form-control" id="media-type">
-							<option value="sh" selected >products</option>
+							<option value="sh" >products</option>
 							<option value="i" >Image</option>
 							<option value="r" >Recipes</option>
 							<option value="yt" >Youtube</option>
 							<option value="bo" >Books</option>
 							<option value="n" >News</option>
-							<option value="" >Web Search</option>
+							<option value="" selected>Web Search</option>
 						</select>
 					</div>
 					<div class="form-group">
@@ -70,7 +77,29 @@ $(document).ready(function(){
 		{
 			$(".kw_list").val('');
 			$.each(list_arr, function (key, val) {
-		        get_suggest(val);
+
+				var count = val.split(/\s+/).length;
+
+				var max_words = $(".max_words").val();
+
+				if(count <= max_words)
+				{
+					get_suggest(val);
+				}
+				else
+				{
+					var kw_list = $(".kw_list").val();
+					var rn = "";
+
+					if(kw_list)
+					{
+						rn = "\r\n";
+					}
+
+					$(".kw_list").val(kw_list+rn+val);
+				}
+
+		        
 		    });		
 		}
 	})
@@ -99,21 +128,21 @@ $(document).ready(function(){
 	        }
 	    }).done(function(data)
 	    {	
+    		var kw_list = $(".kw_list").val();
+
+			var rn = "";
+
+			if(kw_list)
+			{
+				rn = "\r\n";
+			}
+
 	    	if(data[1].length > 0)
 	    	{
-	    		var kw_list = $(".kw_list").val();
-
-				var rn = "";
-
-				if(kw_list)
-				{
-					rn = "\r\n";
-				}
-
-		    	var hasil = data[1].join("\r\n");
-
-		        $(".kw_list").val(kw_list+rn+hasil);
+		    	query = data[1].join("\r\n");		        
 	    	}
+
+	    	$(".kw_list").val(kw_list+rn+query);
 	    });
 	}
 })

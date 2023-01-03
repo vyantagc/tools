@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Spintax Tester</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="col-12 my-2" align="center">
+			<h1 class="h3">Spintax Tester</h1>
+		</div>
+		<div class="col-md-8 offset-md-2 my-4">
+			<div class="card">
+				<div class="card-body">
+					<div class="form-group">
+					  <label for="comment">Spintax:</label>
+					  <textarea class="spintax form-control" rows="8" id="spintax"></textarea>
+					</div> 
+					<div class="form-group">
+					  <label for="comment">Output:</label>
+					  <textarea class="output_txt form-control" rows="10" id="output_txt"></textarea>
+					</div> 
+					<button class="do_spin btn btn-primary">Generate</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<footer>
+	<div class="d-block" align="center">
+		<p>Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+	</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$(document).on('click','.do_spin',function()
+	{    
+		var spintax = $(".spintax").val();
+	    var spinTxt = run_spintax(spintax);
+	    $(".output_txt").val(spinTxt);
+
+	})
+
+	function run_spintax(spintax) {
+	    var regex = new RegExp(/{([^{}]+?)}/);
+	    while ((to_spin = regex.exec(spintax)) !== null) {
+	        opts = to_spin[1].split("|");
+	        random = Math.floor(Math.random() * opts.length);
+	        spintax = spintax.replace(to_spin[0], opts[random])
+	    }
+	    return spintax
+	}
+})
+</script>
+</html>
