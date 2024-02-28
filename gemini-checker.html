@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Gemini API Keys</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Verify Gemini API Keys</h2>
+    <textarea id="apiKeys" class="form-control" rows="10" placeholder="Enter API keys, one per line"></textarea>
+    <button id="verifyKeys" class="btn btn-primary mt-3">Verify Keys</button>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">API Key</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody id="resultsBody">
+        </tbody>
+    </table>
+    <div class="d-block" align="center">
+        <p>VYANT.CC | Created By <a href="https://www.facebook.com/vyant789" target="_blank">vyant</a></p>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js" integrity="sha512-7rusk8kGPFynZWu26OKbTeI+QPoYchtxsmPeBqkHIEXJxeun4yJ4ISYe7C6sz9wdxeE1Gk3VxsIWgCZTc+vX3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.getElementById('verifyKeys').addEventListener('click', async function() {
+        var apiKeys = document.getElementById('apiKeys').value.split('\n');
+        var resultsBody = document.getElementById('resultsBody');
+        resultsBody.innerHTML = ''; // Clear existing results
+
+        const apiUrl = `https://generativelanguage.googleapis.com/v1/models`;
+
+        for (let i = 0; i < apiKeys.length; i++) {
+            let apiKey = apiKeys[i].trim();
+            if (apiKey) {
+                try {
+                    // Ganti dengan URL endpoint server Anda
+                    const response = await fetch(`${apiUrl}?key=${apiKey}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        muteHttpExceptions: true
+                    });
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+                    addResultToTable(i + 1, apiKey, 'Verified');
+                } catch (error) {
+                    console.error('Verification failed:', error);
+                    addResultToTable(i + 1, apiKey, 'Invalid');
+                }
+            }
+        }
+    });
+
+    function addResultToTable(index, apiKey, status) {
+        var resultsBody = document.getElementById('resultsBody');
+        let row = `<tr>
+                      <th scope="row">${index}</th>
+                      <td>${apiKey}</td>
+                      <td>${status}</td>
+                   </tr>`;
+        resultsBody.innerHTML += row;
+    }
+
+</script>
+</body>
+</html>
