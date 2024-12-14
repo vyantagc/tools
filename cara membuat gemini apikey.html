@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Membuat Google Gemini API Key</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center">Panduan Membuat Google Gemini API Key</h1>
+
+        <div class="mt-4">
+            <h2>Langkah 1: Buat Project Google Cloud</h2>
+            <ol>
+                <li>Buka <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
+                <li>Login menggunakan akun Gmail atau G Suite Anda.</li>
+                <li>Klik pemilih proyek di bagian atas navigasi dan pilih <strong>Project Baru</strong>.</li>
+                <li>Isi nama project, organisasi, dan lokasi sesuai kebutuhan, lalu klik <strong>Buat</strong>.</li>
+            </ol>
+        </div>
+
+        <div class="mt-4">
+            <h2>Langkah 2: Aktifkan Library Gemini AI dan YouTube API</h2>
+            <p>Aktifkan API yang diperlukan untuk project:</p>
+            <ol>
+                <li>Buka <a href="https://console.cloud.google.com/marketplace/product/google/generativelanguage.googleapis.com" target="_blank">Library Gemini AI API</a> dan klik <strong>Enable</strong>.</li>
+                <li>Buka <a href="https://console.cloud.google.com/marketplace/product/google/youtube.googleapis.com" target="_blank">Library YouTube Data API</a> dan klik <strong>Enable</strong>.</li>
+            </ol>
+        </div>
+
+        <div class="mt-4">
+            <h2>Langkah 3: Buat API Key</h2>
+            <ol>
+                <li>Di halaman <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Kredensial</a>, klik <strong>Buat Kredensial</strong> dan pilih <strong>API Key</strong>.</li>
+                <li>Salin API key yang dihasilkan dan simpan dengan aman.</li>
+                <li>Opsional, batasi API key ke IP tertentu, referer, atau API untuk keamanan tambahan:</li>
+                <ul>
+                    <li>Klik <strong>Edit API Key</strong>.</li>
+                    <li>Atur pembatasan penggunaan di bawah <strong>Application Restrictions</strong> dan <strong>API Restrictions</strong>.</li>
+                    <li>Klik <strong>Simpan</strong>.</li>
+                </ul>
+            </ol>
+        </div>
+
+        <div class="mt-4">
+            <h2>Catatan Penting</h2>
+            <ul>
+                <li>Gunakan satu akun Gmail atau G Suite untuk membuat beberapa project cloud.</li>
+                <li>Pastikan setiap project cloud memiliki API key unik untuk menghindari konflik kuota.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
